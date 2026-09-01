@@ -24,5 +24,5 @@ CMD ["python","app.py"]
 ### Comando en bash para crear la imagen y correr el contenedor
 
 ```bash
-docker build -t "api_usuarios_tareas" . && docker run -it --name api_usuarios_tareas -p 5000:5000 -v .:/app api_usuarios_tareas
+docker build -t "api_usuarios_tareas" . && docker run -it --name api_usuarios_tareas -p 5000:5000 -v .:/app -v /app/venv api_usuarios_tareas
 ```
