@@ -8,4 +8,4 @@ users_bp = Blueprint(
 
 @users_bp.route("/users", methods=["GET"])
 def users():
-    return jsonify({"message": "Hi from the users routes"}),200
+    return jsonify({"message": "Hi from the users routes"}), 200

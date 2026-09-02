@@ -8,4 +8,4 @@ auth_bp = Blueprint(
 
 @auth_bp.route("/auth", methods=["GET"])
 def auth():
-    return jsonify({"message": "Hi from the auth route"}),200
+    return jsonify({"message": "Hi from the auth route"})
