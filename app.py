@@ -1,9 +1,12 @@
 from flask import Flask
-from utils.handlers import register_error_handlers
+
 # Routes imports
 from routes.auth_routes import auth_bp
 from routes.tasks_routes import tasks_bp
 from routes.users_routes import users_bp
+
+# Error handler import
+from utils.handlers import register_error_handlers
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
