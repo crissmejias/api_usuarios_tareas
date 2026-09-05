@@ -15,3 +15,9 @@ def connect_to_db():
     )
     cursor = conn.cursor()
     return conn, cursor
+
+def close_connection(conn, cursor):
+    if cursor:
+        cursor.close()
+    if conn:
+        conn.close()
