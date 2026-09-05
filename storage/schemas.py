@@ -1,5 +1,6 @@
-from db import connect_to_db
 from psycopg2 import errors
+
+from .db import connect_to_db
 
 
 def createTasks():
