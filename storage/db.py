@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from psycopg2 import connect
+from psycopg2.extras import RealDictCursor
 
 
 def connect_to_db():
@@ -13,8 +14,9 @@ def connect_to_db():
         host=os.getenv("DB_HOST", "localhost"),
         port="5432",
     )
-    cursor = conn.cursor()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     return conn, cursor
+
 
 def close_connection(conn, cursor):
     if cursor:
