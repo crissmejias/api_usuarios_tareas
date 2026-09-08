@@ -61,8 +61,10 @@ def edit_user(req, id):
         """,
             [req["name"], req["email"], id],
         )
-        conn.commit()
+        if cursor.rowcount == 0:
+            return None
         edited_user = cursor.fetchone()
+        conn.commit()
         return edited_user
     finally:
         close_connection(conn, cursor)
@@ -73,6 +75,9 @@ def delete_user(id):
     try:
         conn, cursor = connect_to_db()
         cursor.execute("DELETE FROM users WHERE id = %s", [id])
+        if cursor.rowcount == 0:
+            return None
         conn.commit()
+        return True
     finally:
         close_connection(conn, cursor)
