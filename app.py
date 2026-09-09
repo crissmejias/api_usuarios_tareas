@@ -1,7 +1,7 @@
 from flask import Flask
 
 # Routes imports
-from routes.auth_routes import auth_bp
+from auth.auth_routes import auth_bp
 from routes.tasks_routes import tasks_bp
 from routes.users_routes import users_bp
 
