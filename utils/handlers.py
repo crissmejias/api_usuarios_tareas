@@ -1,4 +1,5 @@
 from flask import jsonify
+from jwt import ExpiredSignatureError, InvalidTokenError
 from psycopg2 import errors
 
 
@@ -14,3 +15,11 @@ def register_error_handlers(app):
         return jsonify(
             {"code": 500, "message": "Something went wrong!", "data": None}
         ), 500
+
+    @app.errorhandler(InvalidTokenError)
+    def handle_jwt_invalid_error(error):
+        return jsonify({"code": 401, "message": "Invalid Token!", "data": None}), 401
+
+    @app.errorhandler(ExpiredSignatureError)
+    def handle_jwt_expired_token_error(error):
+        return jsonify({"code": 401, "message": "Expired token!", "data": None}), 401
