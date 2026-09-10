@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify
-
+from flask import Blueprint, jsonify,request
+from auth.jwt_handler import require_auth 
+from storage import tasks_storage
 tasks_bp = Blueprint(
     "tasks",
     __name__,
@@ -7,25 +8,41 @@ tasks_bp = Blueprint(
 
 
 @tasks_bp.route("/tasks", methods=["GET"])
-def list_tasks():
-    return jsonify({"message": "This is the tasks route"}), 200
+@require_auth
+def list_tasks(user_id):
+    tasks =  tasks_storage.list_tasks(user_id)
+    return jsonify({"code":200,"message":"Success!","data":tasks}), 200
 
 
 @tasks_bp.route("/tasks/<int:id>", methods=["GET"])
-def bring_unique_task(id):
-    return jsonify({"message": f"This is a task with ID {id}"}), 200
+@require_auth
+def bring_unique_task(user_id,id):
+    task = tasks_storage.get_task(user_id,id)
+    if not task or not task.get("id"):
+        return jsonify({"code":404,"message":"The task does not exist","data":None}),404
+    return jsonify({"code":200,"message":"Success","data":task}), 200
 
 
 @tasks_bp.route("/tasks", methods=["POST"])
-def create_task():
-    return jsonify({"message": "A new task was created"}), 201
+@require_auth
+def create_task(user_id):
+    req = request.get_json()
+    if (
+        not req or
+        not req.get("title")
+    ):
+        return jsonify({"code":400,"message":"There are missing fields!","data":None}),400
+    new_task = tasks_storage.create_task(req["title"],user_id)
+    return jsonify({"code":201, "message": "Success","data":new_task}), 201
 
 
 @tasks_bp.route("/tasks/<int:id>", methods=["PUT"])
-def edit_task(id):
+@require_auth
+def edit_task(user_id, id):
     return jsonify({"message": f"The task with ID {id} was modified"}), 200
 
 
 @tasks_bp.route("/tasks/<int:id>", methods=["DELETE"])
-def delete_task(id):
+@require_auth
+def delete_task(user_id, id):
     return "", 204

@@ -28,7 +28,7 @@ def get_task(user_id, id):
         close_connection(conn, cursor)
 
 
-def create_task(title, user_id):
+def create_task(user_id,title):
     conn = cursor = None
     try:
         conn, cursor = connect_to_db()
