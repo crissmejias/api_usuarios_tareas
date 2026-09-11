@@ -28,7 +28,7 @@ def get_task(user_id, id):
         close_connection(conn, cursor)
 
 
-def create_task(user_id,title):
+def create_task(user_id, title):
     conn = cursor = None
     try:
         conn, cursor = connect_to_db()
@@ -42,5 +42,44 @@ def create_task(user_id,title):
         conn.commit()
         new_task = cursor.fetchone()
         return new_task
+    finally:
+        close_connection(conn, cursor)
+
+
+def edit_task(user_id, id, req):
+    conn = cursor = None
+    try:
+        conn, cursor = connect_to_db()
+        cursor.execute(
+            """
+        UPDATE tasks SET title =%s, completed=%s
+        WHERE id = %s AND user_id = %s
+        RETURNING id, title, completed""",
+            [req["title"], req["completed"], id, user_id],
+        )
+        edited_task = cursor.fetchone()
+        if cursor.rowcount == 0:
+            return None
+        conn.commit()
+        return edited_task
+    finally:
+        close_connection(conn, cursor)
+
+
+def delete_task(user_id, id):
+    conn = cursor = None
+    try:
+        conn, cursor = connect_to_db()
+        cursor.execute(
+            """
+        DELETE FROM tasks
+        WHERE user_id = %s AND id = %s
+        """,
+            [user_id, id],
+        )
+        if cursor.rowcount == 0:
+            return None
+        conn.commit()
+        return True
     finally:
         close_connection(conn, cursor)
