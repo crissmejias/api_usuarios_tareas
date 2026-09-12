@@ -37,7 +37,7 @@ def create_task(user_id, title):
         VALUES (%s, %s)
         RETURNING id, title, completed
         """,
-            [title, user_id],
+            [user_id, title],
         )
         conn.commit()
         new_task = cursor.fetchone()

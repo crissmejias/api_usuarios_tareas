@@ -35,7 +35,7 @@ def create_task(user_id):
         return jsonify(
             {"code": 400, "message": "There are missing fields!", "data": None}
         ), 400
-    new_task = tasks_storage.create_task(req["title"], user_id)
+    new_task = tasks_storage.create_task(user_id, req["title"])
     return jsonify({"code": 201, "message": "Success", "data": new_task}), 201
 
 
