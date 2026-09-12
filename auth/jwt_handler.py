@@ -29,9 +29,12 @@ def require_auth(f):
             return jsonify(
                 {"code": 401, "message": "Invalid header!", "data": None}
             ), 401
-        # TODO: validar formato del header (auth_header.split(" ")) antes del unpacking
-        # para evitar ValueError si el header viene malformado (sin espacio, etc.)
-        auth_type, token = auth_header.split(" ")
+        auth_header_array = auth_header.split(" ")
+        if len(auth_header_array) != 2:
+            return jsonify(
+                {"code": 401, "message": "Invalid header!", "data": None}
+            ), 401
+        auth_type, token = auth_header_array
         if auth_type != "Bearer":
             return jsonify(
                 {"code": 401, "message": "Invalid header!", "data": None}
