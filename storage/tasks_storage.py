@@ -57,9 +57,9 @@ def edit_task(user_id, id, req):
         RETURNING id, title, completed""",
             [req["title"], req["completed"], id, user_id],
         )
-        edited_task = cursor.fetchone()
         if cursor.rowcount == 0:
             return None
+        edited_task = cursor.fetchone()
         conn.commit()
         return edited_task
     finally:

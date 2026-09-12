@@ -1,18 +1,15 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,timezone
 from functools import wraps
-
 import jwt
-from dotenv import load_dotenv
 from flask import jsonify, request, g
 
 
 def create_jwt(user):
-    load_dotenv()
     secret = os.getenv("SECRET")
     payload = {
         "user_id": user["id"],
-        "exp": datetime.now(tz=None) + timedelta(minutes=15),
+        "exp": datetime.now(timezone.utc) + timedelta(minutes=15),
         "role": user["role"]
     }
     token = jwt.encode(payload, secret, algorithm="HS256")
@@ -22,7 +19,6 @@ def create_jwt(user):
 def require_auth(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        load_dotenv()
         secret = os.getenv("SECRET")
         auth_header = request.headers.get("Authorization")
         if not auth_header:

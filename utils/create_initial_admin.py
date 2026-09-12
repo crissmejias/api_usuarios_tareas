@@ -1,8 +1,6 @@
 import bcrypt
 import os 
-from dotenv import load_dotenv
 def create_admin(conn,cursor):
-    load_dotenv()
     ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
     ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
     salt = bcrypt.gensalt()

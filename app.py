@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask
 
 # Routes imports
@@ -19,6 +22,7 @@ register_error_handlers(app)
 app.register_blueprint(tasks_bp)
 app.register_blueprint(users_bp)
 app.register_blueprint(auth_bp)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
