@@ -8,7 +8,7 @@ def auth_user(req):
     try:
         conn, cursor = connect_to_db()
         cursor.execute(
-            "SELECT id, name, email, password FROM users WHERE email = %s",
+            "SELECT id, name, email, password, role FROM users WHERE email = %s",
             [req["email"]],
         )
         user = cursor.fetchone()

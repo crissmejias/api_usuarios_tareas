@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-
+from auth.jwt_handler import require_admin, require_auth 
 from storage import users_storage
 
 users_bp = Blueprint(
@@ -9,13 +9,17 @@ users_bp = Blueprint(
 
 
 @users_bp.route("/users", methods=["GET"])
-def get_users():
+@require_auth
+@require_admin
+def get_users(user_id):
     users = users_storage.list_users()
     return jsonify({"code": 200, "message": "success", "data": users}), 200
 
 
 @users_bp.route("/users/<int:id>", methods=["GET"])
-def get_single_user(id):
+@require_auth
+@require_admin
+def get_single_user(user_id, id):
     single_user = users_storage.list_user(id)
     if not single_user:
         return jsonify(
@@ -25,7 +29,9 @@ def get_single_user(id):
 
 
 @users_bp.route("/users", methods=["POST"])
-def create_user():
+@require_auth
+@require_admin
+def create_user(user_id):
     req = request.get_json()
     if (
         not req
@@ -41,7 +47,9 @@ def create_user():
 
 
 @users_bp.route("/users/<int:id>", methods=["PUT"])
-def edit_user(id):
+@require_auth
+@require_admin
+def edit_user(user_id, id):
     req = request.get_json()
     if not req or not req.get("name") or not req.get("email"):
         return jsonify(
@@ -54,7 +62,9 @@ def edit_user(id):
 
 
 @users_bp.route("/users/<int:id>", methods=["DELETE"])
-def delete_user(id):
+@require_auth
+@require_admin
+def delete_user(user_id, id):
     valid_deletion = users_storage.delete_user(id)
     if valid_deletion:
         return "", 204
