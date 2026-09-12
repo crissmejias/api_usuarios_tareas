@@ -1,5 +1,5 @@
 from psycopg2 import errors
-
+from utils import create_initial_admin
 from .db import connect_to_db
 
 
@@ -14,7 +14,7 @@ def createTasks():
         user_id INTEGER NOT NULL,
         title TEXT NOT NULL,
         completed BOOLEAN NOT NULL DEFAULT false,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENpT_TIMESTAMP,
         PRIMARY KEY (id),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );""")
@@ -44,6 +44,7 @@ def createUsers():
         CONSTRAINT check_valid_email CHECK (email LIKE '_%@_%._%'),
         CONSTRAINT check_valid_role CHECK (role in ('user','admin'))
         );""")
+        create_initial_admin.create_admin(conn,cursor)
         conn.commit()
     except errors.Error as error:
         return {"error": f"{error}"}
