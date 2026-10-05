@@ -162,6 +162,7 @@ CRUD completo sobre el recurso `users`, con validación de campos y respuestas J
 |---|---|---|
 | POST | `/users` | Crea un usuario. Valida `name`, `email`, `password`. Hashea el password con `bcrypt` antes de guardarlo. |
 | PUT | `/users/<id>` | Actualiza `name` y `email` (reemplazo completo). 404 si el id no existe. |
+| PATCH | `/users/role/<id>` | Actualiza `role` del usuario (modificación parcial). 404 si el id no existe. |
 | DELETE | `/users/<id>` | Elimina un usuario. 404 si el id no existe. |
 
 ## 4. Autenticación (`auth_bp`)
@@ -199,7 +200,5 @@ CRUD completo sobre el recurso `tasks`, protegido en su totalidad con `@require_
 
 ## Pendientes
 
-- **Cambio de rol**: la tabla `users` no incluye actualmente una columna de rol (`user`/`admin`). Falta definir el schema (columna `role`, valores permitidos) y la lógica de autorización asociada — quién puede cambiar el rol de otro usuario, y qué endpoints quedarían restringidos a `admin`.
-- **JWT refresh**: El JWT expira a los 15 minutos. Falta implementar un proceso para que se refresque automáticamente sin volver a hacer login.
+- <del>**Cambio de rol**: la tabla `users` no incluye actualmente una columna de rol (`user`/`admin`). Falta definir el schema (columna `role`, valores permitidos) y la lógica de autorización asociada — quién puede cambiar el rol de otro usuario, y qué endpoints quedarían restringidos a `admin`.</del> **completado**
 - **Testing**: por ahora todo el CRUD (`users`, `tasks`, `auth`) fue probado manualmente con Posting. Falta una rama dedicada para introducir `pytest`, fixtures, y una base de datos de test separada (contenedor Docker sin volumen, para partir de un estado limpio en cada corrida).
-- **Robustez del header `Authorization`**: el parseo del header (`split(" ")`) no valida el formato antes de hacer el unpacking — un header malformado (sin espacio, vacío) podría lanzar un error no controlado. Pendiente blindarlo.
