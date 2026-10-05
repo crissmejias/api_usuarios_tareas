@@ -69,3 +69,23 @@ def delete_user(user_id, id):
     if valid_deletion:
         return "", 204
     return jsonify({"code": 404, "message": "The ID does not exist", "data": None}), 404
+
+
+@users_bp.route("/users/role/<int:id>", methods=["PATCH"])
+@require_auth
+@require_admin
+def change_user_role(user_id,id):
+    req = request.get_json()
+    if not req or not req.get("role"):
+        return jsonify(
+            {"code": 400, "message": "There are missing fields!", "data": None}
+        ), 400
+    if user_id == id:
+        return jsonify({"code": 403, "message": "Invalid action: You cannot change your own admin status", "data": None}), 403
+    if req.get("role") not in ("user","admin"):
+        return jsonify({"code": 400, "message": "The role is invalid. Options: 'admin','user'", "data": None}), 400
+    
+    res = users_storage.edit_user_role(req.get("role"),id)
+    if res is None:
+        return jsonify({"code": 404, "message": "The ID does not exist", "data": None}), 404
+    return jsonify({"code": 200, "message": "success", "data": res}), 200

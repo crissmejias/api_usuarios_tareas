@@ -48,6 +48,23 @@ def create_user(req):
     finally:
         close_connection(conn, cursor)
 
+def edit_user_role(role,id):
+    conn = cursor = None
+    try:
+        conn, cursor = connect_to_db()        
+        cursor.execute(
+            """
+        UPDATE users SET role = %s
+        WHERE id = %s
+        RETURNING id, name, email, role
+        """,[role, id],)
+        if cursor.rowcount == 0:
+            return None
+        edited_user = cursor.fetchone()
+        conn.commit()
+        return edited_user
+    finally:
+        close_connection(conn, cursor)
 
 def edit_user(req, id):
     conn = cursor = None
