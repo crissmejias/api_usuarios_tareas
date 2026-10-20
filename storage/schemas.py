@@ -14,7 +14,7 @@ def createTasks():
         user_id INTEGER NOT NULL,
         title TEXT NOT NULL,
         completed BOOLEAN NOT NULL DEFAULT false,
-        created_at TIMESTAMP DEFAULT CURRENpT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );""")
