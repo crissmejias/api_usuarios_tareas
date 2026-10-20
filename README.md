@@ -198,7 +198,16 @@ CRUD completo sobre el recurso `tasks`, protegido en su totalidad con `@require_
 | PUT | `/tasks/<id>` | Actualiza `title` y `completed` (reemplazo completo). Valida presencia de ambos campos — `completed` se chequea con `is None` para no confundir `false` con "campo ausente". 404 si no existe o no pertenece al usuario. |
 | DELETE | `/tasks/<id>` | Elimina una tarea, solo si pertenece al usuario autenticado. 404 si no existe o no le pertenece. |
 
+## Testing
+
+Las pruebas de integración de `tasks` corren contra una base de datos PostgreSQL real, separada de la de desarrollo. Por defecto se usa `<DB_NAME>_test` (se puede sobreescribir con `DB_NAME_TEST`); la base se crea automáticamente y el schema se reinicia en cada corrida.
+
+```bash
+docker compose up -d db
+pytest
+```
+
 ## Pendientes
 
 - <del>**Cambio de rol**: la tabla `users` no incluye actualmente una columna de rol (`user`/`admin`). Falta definir el schema (columna `role`, valores permitidos) y la lógica de autorización asociada — quién puede cambiar el rol de otro usuario, y qué endpoints quedarían restringidos a `admin`.</del> **completado**
-- **Testing**: por ahora todo el CRUD (`users`, `tasks`, `auth`) fue probado manualmente con Posting. Falta una rama dedicada para introducir `pytest`, fixtures, y una base de datos de test separada (contenedor Docker sin volumen, para partir de un estado limpio en cada corrida).
+- **Testing**: `tasks` ya cuenta con pruebas de integración con `pytest`. Falta cubrir `users` y `auth`.
